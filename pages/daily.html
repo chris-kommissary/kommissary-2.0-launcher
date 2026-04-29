@@ -488,6 +488,56 @@ code, pre, .k-mono { font-family: var(--k-font-mono); font-size: 0.95em; }
 .k-drilldown dt { font-weight: 600; color: var(--k-steel-blue); }
 .k-drilldown dd { margin: 0 0 var(--k-sp-2) 0; }
 
+/* ---------- 10b. Disclaimer banner — 90s "under construction" --------
+   Intentionally cheesy: hazard-stripe borders, gold band, blinking
+   construction emoji, monospace type. Loud on purpose so customers
+   don't mistake the preview for a finished release. */
+.k-disclaimer {
+    background: #FFD700;                        /* old-timey gold */
+    color: #1A1A1A;
+    padding: var(--k-sp-2) var(--k-sp-4);
+    text-align: center;
+    font-family: "Courier New", "Cascadia Mono", monospace;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-image: repeating-linear-gradient(
+        45deg,
+        #FFD700 0, #FFD700 10px,
+        #1A1A1A 10px, #1A1A1A 20px
+    ) 10;
+    /* breakout to viewport edges like the banner */
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    margin-bottom: 0;
+}
+.k-disclaimer .k-cone {
+    display: inline-block;
+    margin: 0 6px;
+    animation: kBlinkSlow 1.2s step-start infinite;
+    font-size: 18px;
+    line-height: 1;
+    vertical-align: middle;
+}
+.k-disclaimer .k-line2 {
+    display: block;
+    margin-top: 4px;
+    font-weight: 600;
+    font-size: 12px;
+    color: #1A1A1A;
+}
+.k-disclaimer a {
+    color: #C84E14;
+    text-decoration: underline;
+    font-weight: 800;
+}
+.k-disclaimer a:hover { color: #1A1A1A; background: #1A1A1A; color: #FFD700; padding: 0 2px; }
+@keyframes kBlinkSlow {
+    50% { opacity: 0.15; }
+}
+
 /* ---------- 11. Utilities -------------------------------------------- */
 .k-muted   { color: var(--k-mid-grey); }
 .k-strong  { font-weight: 700; }
@@ -513,10 +563,15 @@ code, pre, .k-mono { font-family: var(--k-font-mono); font-size: 0.95em; }
 }
 
 </style>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 </head>
 <body>
 <div class="k-page">
+
+  <div class="k-disclaimer">
+    <span class="k-cone">🚧</span> UNDER CONSTRUCTION — TEST SITE, NOT FOR RELEASE <span class="k-cone">🚧</span>
+    <span class="k-line2">Spotted something broken? Email <a href="mailto:c.t.gaughan@gmail.com">c.t.gaughan@gmail.com</a></span>
+  </div>
 
   <div class="k-banner k-theme-daily">
     <div class="k-banner-left">
@@ -564,7 +619,7 @@ code, pre, .k-mono { font-family: var(--k-font-mono); font-size: 0.95em; }
   <h1 class="k-h1">Site 67 — Supportive Children Advocacy Network (SCAN) - Robinson</h1>
   <input type="hidden" id="daily-cips" value="67">
   <input type="hidden" id="daily-site-name" value="Supportive Children Advocacy Network (SCAN) - Robinson">
-  <input type="hidden" id="daily-export-date" value="2026-04-28">
+  <input type="hidden" id="daily-export-date" value="2026-04-29">
 
   <div class="k-card">
     <div class="k-h2">Site profile</div>
@@ -597,13 +652,45 @@ code, pre, .k-mono { font-family: var(--k-font-mono); font-size: 0.95em; }
   </div>
 
   <div class="k-h7" style="margin-top: var(--k-sp-6);">
-    Generated 2026-04-28 23:56 by bb5 / scaffold script · live KPF Production read at fetch time
+    Generated 2026-04-29 00:02 by bb5 / scaffold script · live KPF Production read at fetch time
   </div>
 </div>
 
 <script>
   // Export daily site detail + history to Excel — single workbook, two sheets:
   // 'Profile' (key-value) and 'History' (recent + upcoming events).
+  // Brand palette — same as brainer (Kommissary spreadsheet H1/H2/H3)
+  var K = {
+    forestGreen: "63A14E",
+    steelBlue:   "277CA1",
+    coral:       "FF6666",
+    cream:       "FFE9CC",
+    white:       "FFFFFF",
+    darkText:    "1A1A1A",
+  };
+  function _setCellStyle(ws, ref, style) {
+    if (!ws[ref]) ws[ref] = { t: 's', v: '' };
+    ws[ref].s = style;
+  }
+  function _styleRow(ws, rowIdx, fillHex, fontHex, opts) {
+    opts = opts || {};
+    var range = XLSX.utils.decode_range(ws['!ref']);
+    for (var c = range.s.c; c <= range.e.c; c++) {
+      var ref = XLSX.utils.encode_cell({ r: rowIdx, c: c });
+      _setCellStyle(ws, ref, {
+        fill: { patternType: "solid", fgColor: { rgb: fillHex } },
+        font: { color: { rgb: fontHex }, bold: opts.bold !== false,
+                italic: !!opts.italic, sz: opts.sz || 11, name: "Calibri" },
+        alignment: { horizontal: opts.align || "left", vertical: "center", wrapText: !!opts.wrap }
+      });
+    }
+  }
+  function _mergeRow(ws, rowIdx) {
+    var range = XLSX.utils.decode_range(ws['!ref']);
+    if (!ws['!merges']) ws['!merges'] = [];
+    ws['!merges'].push({ s: { r: rowIdx, c: 0 }, e: { r: rowIdx, c: range.e.c } });
+  }
+
   function exportDailyExcel() {
     if (typeof XLSX === 'undefined') {
       alert('Excel library still loading — try again in a moment.');
@@ -615,8 +702,12 @@ code, pre, .k-mono { font-family: var(--k-font-mono); font-size: 0.95em; }
 
     var wb = XLSX.utils.book_new();
 
-    // Profile sheet — read all .k-row dt/dd pairs
-    var profileAoa = [['KPF Daily — Site ' + cips + ' — ' + siteName], [], ['Field', 'Value']];
+    // ----- Profile sheet -----
+    var profileAoa = [
+      ['KPF Daily — Site ' + cips + ' — ' + siteName],   // 0 — H1
+      [],                                                  // 1 — spacer
+      ['Field', 'Value']                                   // 2 — H2
+    ];
     var rows = document.querySelectorAll('.k-drilldown .k-row');
     rows.forEach(function(r) {
       var dt = r.querySelector('dt');
@@ -627,15 +718,22 @@ code, pre, .k-mono { font-family: var(--k-font-mono); font-size: 0.95em; }
     });
     var wsP = XLSX.utils.aoa_to_sheet(profileAoa);
     wsP['!cols'] = [{wch: 22}, {wch: 60}];
+    _styleRow(wsP, 0, K.forestGreen, K.white, { align: "center", sz: 14 });
+    _mergeRow(wsP, 0);
+    _styleRow(wsP, 2, K.steelBlue, K.white, { align: "center", sz: 11 });
+    wsP['!rows'] = [{ hpt: 24 }, { hpt: 6 }, { hpt: 18 }];
     XLSX.utils.book_append_sheet(wb, wsP, 'Profile');
 
-    // History sheet — read all rows from the last table on page
+    // ----- History sheet -----
     var tables = document.querySelectorAll('table.k-table');
     var histTable = tables[tables.length - 1];
     if (histTable) {
-      var histAoa = [['Delivery event history — Site ' + cips], []];
+      var histAoa = [
+        ['Delivery event history — Site ' + cips],         // 0 — H1
+        []                                                   // 1 — spacer
+      ];
       var hdr = histTable.querySelectorAll('thead th');
-      histAoa.push(Array.from(hdr).map(function(th){ return th.innerText.trim(); }));
+      histAoa.push(Array.from(hdr).map(function(th){ return th.innerText.trim(); })); // 2 — H2
       var bodyRows = histTable.querySelectorAll('tbody tr');
       bodyRows.forEach(function(tr) {
         var tds = tr.querySelectorAll('td');
@@ -649,6 +747,10 @@ code, pre, .k-mono { font-family: var(--k-font-mono); font-size: 0.95em; }
         {wch: 12}, {wch: 7}, {wch: 9}, {wch: 9}, {wch: 8},
         {wch: 10}, {wch: 12}, {wch: 30}, {wch: 22}
       ];
+      _styleRow(wsH, 0, K.forestGreen, K.white, { align: "center", sz: 14 });
+      _mergeRow(wsH, 0);
+      _styleRow(wsH, 2, K.steelBlue, K.white, { align: "center", sz: 11 });
+      wsH['!rows'] = [{ hpt: 24 }, { hpt: 6 }, { hpt: 18 }];
       XLSX.utils.book_append_sheet(wb, wsH, 'History');
     }
 
