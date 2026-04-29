@@ -29,8 +29,8 @@ your default browser.
 |---|---|---|
 | **KMPP** | The legacy KMPP web app | Live (still in service; will be retired once Menu 2.0 is fully proven) |
 | **Menu 2.0** | The replacement for KMPP, hosted on the new Kommissary 2.0 platform | **Live** — kommissary.com login required |
-| **Brainer 2.0** | Per-day route plan view, replacing the regenerated brainer spreadsheet | **Preview** — opens a bundled HTML file with live data from when this package was built |
-| **Daily 2.0** | Per-site detail card, replacing the regenerated daily production sheets | **Preview** — same |
+| **Brainer 2.0** | Per-day route plan view, replacing the regenerated brainer spreadsheet | **Preview** (auth-gated) — Google sign-in required, restricted to approved users |
+| **Daily 2.0** | Per-site detail card, replacing the regenerated daily production sheets | **Preview** (auth-gated) — same |
 
 ## Requirements
 

@@ -1,13 +1,12 @@
-"""Kommissary 2.0 — Utility Launcher (prototype, 2026-04-28).
+"""Kommissary 2.0 — Utility Launcher (prototype).
 
 Drop this folder anywhere (Desktop is fine). Double-click launcher.bat
 (Windows) or run `python launcher.py` (Mac/Linux/anywhere with Python 3).
 
 Click a utility button -> opens that surface in your default browser.
-- KMPP (legacy)        : live web app on Google Apps Script (kommissary.com domain)
-- Menu 2.0             : new web app on Google Apps Script
-- Brainer 2.0          : local preview page bundled in this folder
-- Daily 2.0            : local preview page bundled in this folder
+All four utilities now live behind kommissary.com Google sign-in;
+Brainer 2.0 and Daily 2.0 are additionally restricted to a small
+allowlist of approved users.
 
 No installation needed. Pure-stdlib Python (tkinter is built in).
 """
@@ -18,11 +17,12 @@ from pathlib import Path
 
 # -------- targets ------------------------------------------------------
 KMPP_URL    = "https://script.google.com/a/macros/kommissary.com/s/AKfycbwblN-wbqbpxBTRWe7-9586m6T6RU4-CifKdYZVkHvTgvP3wrrF7SOlin0Ls8dDhNi6/exec"
-MENU20_URL  = "https://script.google.com/a/macros/kommissary.com/s/AKfycbx-Ub-gsw62KRwHkRNHDKNoSJY1mSLYOXCEVwuLVmUjp2AXDeGK9SDxBSNJGt46wXnq/exec?app=menu"
+K2_BASE     = "https://script.google.com/a/macros/kommissary.com/s/AKfycbx-Ub-gsw62KRwHkRNHDKNoSJY1mSLYOXCEVwuLVmUjp2AXDeGK9SDxBSNJGt46wXnq/exec"
+MENU20_URL   = K2_BASE + "?app=menu"
+BRAINER_URL  = K2_BASE + "?app=brainer"   # allowlist-gated
+DAILY_URL    = K2_BASE + "?app=daily"     # allowlist-gated
 
 BASE = Path(__file__).parent.resolve()
-BRAINER_PATH = BASE / "pages" / "brainer.html"
-DAILY_PATH   = BASE / "pages" / "daily.html"
 
 # -------- brand palette -----------------------------------------------
 COLOR_LUNAR    = "#354535"   # Brainer 2.0
@@ -94,10 +94,10 @@ tk.Label(header, text="UTILITY LAUNCHER\nPROTOTYPE",
 cards = tk.Frame(root, bg=COLOR_BG, padx=20, pady=20)
 cards.pack(fill="both", expand=True)
 
-make_card(cards, "KMPP",        "LEGACY",         COLOR_GREY,    KMPP_URL)
-make_card(cards, "MENU 2.0",    "BUILD #5 LIVE",  COLOR_GAMBOGE, MENU20_URL)
-make_card(cards, "BRAINER 2.0", "BUILD #1 PREVIEW", COLOR_LUNAR, BRAINER_PATH)
-make_card(cards, "DAILY 2.0",   "BUILD #1 PREVIEW", COLOR_STEEL, DAILY_PATH)
+make_card(cards, "KMPP",        "LEGACY",                 COLOR_GREY,    KMPP_URL)
+make_card(cards, "MENU 2.0",    "BUILD #6 LIVE",          COLOR_GAMBOGE, MENU20_URL)
+make_card(cards, "BRAINER 2.0", "BUILD #1 PREVIEW (auth)", COLOR_LUNAR,  BRAINER_URL)
+make_card(cards, "DAILY 2.0",   "BUILD #1 PREVIEW (auth)", COLOR_STEEL,  DAILY_URL)
 
 # Footer
 tk.Label(root, text="Prototype · 2026-04-28 · click a utility to open",
