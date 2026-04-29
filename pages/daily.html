@@ -513,6 +513,7 @@ code, pre, .k-mono { font-family: var(--k-font-mono); font-size: 0.95em; }
 }
 
 </style>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 <div class="k-page">
@@ -555,9 +556,15 @@ code, pre, .k-mono { font-family: var(--k-font-mono); font-size: 0.95em; }
   </div>
   <div class="k-banner-sub">daily 2.0 — live from KPF Production · per-site detail</div>
 
-  <p class="k-no-print"><a href="brainer.html">← back to brainer (week view)</a></p>
+  <p class="k-no-print" style="display:flex;align-items:center;justify-content:space-between;">
+    <a href="brainer.html">← back to brainer (week view)</a>
+    <button class="k-btn k-btn-primary k-no-print" onclick="exportDailyExcel()">⬇ Export to Excel</button>
+  </p>
 
   <h1 class="k-h1">Site 67 — Supportive Children Advocacy Network (SCAN) - Robinson</h1>
+  <input type="hidden" id="daily-cips" value="67">
+  <input type="hidden" id="daily-site-name" value="Supportive Children Advocacy Network (SCAN) - Robinson">
+  <input type="hidden" id="daily-export-date" value="2026-04-28">
 
   <div class="k-card">
     <div class="k-h2">Site profile</div>
@@ -590,8 +597,64 @@ code, pre, .k-mono { font-family: var(--k-font-mono); font-size: 0.95em; }
   </div>
 
   <div class="k-h7" style="margin-top: var(--k-sp-6);">
-    Generated 2026-04-28 16:54 by bb5 / scaffold script · live KPF Production read at fetch time
+    Generated 2026-04-28 23:56 by bb5 / scaffold script · live KPF Production read at fetch time
   </div>
 </div>
+
+<script>
+  // Export daily site detail + history to Excel — single workbook, two sheets:
+  // 'Profile' (key-value) and 'History' (recent + upcoming events).
+  function exportDailyExcel() {
+    if (typeof XLSX === 'undefined') {
+      alert('Excel library still loading — try again in a moment.');
+      return;
+    }
+    var cips = document.getElementById('daily-cips').value;
+    var siteName = document.getElementById('daily-site-name').value;
+    var date = document.getElementById('daily-export-date').value;
+
+    var wb = XLSX.utils.book_new();
+
+    // Profile sheet — read all .k-row dt/dd pairs
+    var profileAoa = [['KPF Daily — Site ' + cips + ' — ' + siteName], [], ['Field', 'Value']];
+    var rows = document.querySelectorAll('.k-drilldown .k-row');
+    rows.forEach(function(r) {
+      var dt = r.querySelector('dt');
+      var dd = r.querySelector('dd');
+      if (dt && dd) {
+        profileAoa.push([dt.innerText.trim(), dd.innerText.replace(/\s+/g,' ').trim()]);
+      }
+    });
+    var wsP = XLSX.utils.aoa_to_sheet(profileAoa);
+    wsP['!cols'] = [{wch: 22}, {wch: 60}];
+    XLSX.utils.book_append_sheet(wb, wsP, 'Profile');
+
+    // History sheet — read all rows from the last table on page
+    var tables = document.querySelectorAll('table.k-table');
+    var histTable = tables[tables.length - 1];
+    if (histTable) {
+      var histAoa = [['Delivery event history — Site ' + cips], []];
+      var hdr = histTable.querySelectorAll('thead th');
+      histAoa.push(Array.from(hdr).map(function(th){ return th.innerText.trim(); }));
+      var bodyRows = histTable.querySelectorAll('tbody tr');
+      bodyRows.forEach(function(tr) {
+        var tds = tr.querySelectorAll('td');
+        var row = Array.from(tds).map(function(td){
+          return td.innerText.replace(/\s+/g,' ').trim();
+        });
+        histAoa.push(row);
+      });
+      var wsH = XLSX.utils.aoa_to_sheet(histAoa);
+      wsH['!cols'] = [
+        {wch: 12}, {wch: 7}, {wch: 9}, {wch: 9}, {wch: 8},
+        {wch: 10}, {wch: 12}, {wch: 30}, {wch: 22}
+      ];
+      XLSX.utils.book_append_sheet(wb, wsH, 'History');
+    }
+
+    var safeName = siteName.replace(/[^A-Za-z0-9]+/g,'_').slice(0, 30);
+    XLSX.writeFile(wb, 'KPF_Daily_Site_' + cips + '_' + safeName + '_' + date + '.xlsx');
+  }
+</script>
 </body>
 </html>
