@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>daily2.0 — Site 67 — Supportive Children Advocacy Network (SCAN) - Robinson</title>
+<style>
+/* ============================================================
+   Kommissary 2.0 — base stylesheet
+   Derived from `.admin/.branding/style-guides/kommissary-spreadsheet-design-rules-v2.txt` (v4.0, 2026-04-02)
+   Confirmed colors only. Do not introduce colors outside :root.
+   Author: bb5 — 2026-04-28
+   ============================================================ */
+
+/* ---------- 1. Brand tokens ------------------------------------------- */
+:root {
+    /* Branded palette — for stakeholder/production views */
+    --k-forest-green:      #63A14E;
+    --k-coral:             #FF6666;
+    --k-steel-blue:        #277CA1;
+    --k-cream:             #FFE9CC;
+    --k-light-steel-blue:  #D6E8F5;
+    --k-mid-grey:          #B0B0B0;
+    --k-light-grey:        #F0F0F0;
+
+    /* Extended palette (utility identity colors — for app banners) */
+    --k-orange-roughy: #D64E14;  /* DLT-Pilot */
+    --k-lunar-green:   #354535;  /* Brainer 2.0 */
+    --k-gamboge:       #E19308;  /* Menu 2.0 */
+    --k-sidecar:       #F6E4C2;  /* soft cream — for icon backplate */
+
+    /* Dev greyscale — for internal/working views, NEVER mix with branded */
+    --k-dev-h1: #404040;
+    --k-dev-h2: #606060;
+    --k-dev-h3: #808080;
+    --k-dev-h4: #A0A0A0;
+    --k-dev-h5: #C0C0C0;
+    --k-dev-h6: #E0E0E0;
+    --k-dev-h7: #F5F5F5;
+
+    /* Text colors (only two — white on dark fills, near-black on light fills) */
+    --k-text-light: #FFFFFF;
+    --k-text-dark:  #1A1A1A;
+
+    /* Status semantics — derived from brand colors per design rule:
+       no new colors, statuses must use the confirmed palette */
+    --k-status-ok:        var(--k-forest-green);   /* scheduled / open / shipped */
+    --k-status-hold:      var(--k-cream);          /* internal hold (not customer-cancelled) */
+    --k-status-warn:      var(--k-coral);          /* CO mismatch / no-CO / discrepancy */
+    --k-status-info:      var(--k-steel-blue);     /* informational */
+    --k-status-muted:     var(--k-light-grey);     /* closed / N/A */
+
+    /* Layout */
+    --k-radius:        4px;
+    --k-radius-pill:   999px;
+    --k-border:        1px solid var(--k-mid-grey);
+    --k-border-soft:   1px solid var(--k-light-grey);
+    --k-shadow-sm:     0 1px 2px rgba(0, 0, 0, 0.06);
+    --k-shadow-md:     0 4px 12px rgba(0, 0, 0, 0.08);
+
+    /* Type */
+    --k-font-sans:     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --k-font-mono:     ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, "Courier New", monospace;
+    --k-fs-base:       14px;
+    --k-fs-sm:         12px;
+    --k-fs-lg:         16px;
+    --k-fs-xl:         20px;
+    --k-fs-xxl:        28px;
+
+    /* Spacing scale */
+    --k-sp-1:  4px;
+    --k-sp-2:  8px;
+    --k-sp-3:  12px;
+    --k-sp-4:  16px;
+    --k-sp-5:  24px;
+    --k-sp-6:  32px;
+}
+
+/* ---------- 2. Reset / base ------------------------------------------ */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--k-font-sans);
+    font-size: var(--k-fs-base);
+    color: var(--k-text-dark);
+    background: #FFFFFF;
+    line-height: 1.4;
+}
+
+a { color: var(--k-steel-blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+code, pre, .k-mono { font-family: var(--k-font-mono); font-size: 0.95em; }
+
+/* ---------- 3. Branded heading hierarchy (H1-H7) --------------------- */
+/* Apply via class on any element so the same rules work for <h1> tags AND
+   table header rows / banner divs / etc. */
+
+.k-h1 {
+    background: var(--k-forest-green);
+    color: var(--k-text-light);
+    font-weight: 700;
+    text-align: center;
+    padding: var(--k-sp-3) var(--k-sp-4);
+    font-size: var(--k-fs-xxl);
+    letter-spacing: 0.01em;
+    margin: 0;
+}
+
+.k-h2 {
+    background: var(--k-steel-blue);
+    color: var(--k-text-light);
+    font-weight: 700;
+    text-align: center;
+    padding: var(--k-sp-2) var(--k-sp-3);
+    font-size: var(--k-fs-lg);
+    margin: 0;
+}
+
+.k-h3 {
+    background: var(--k-coral);
+    color: var(--k-text-light);
+    font-weight: 700;
+    text-align: left;
+    padding: var(--k-sp-2) var(--k-sp-3);
+    font-size: var(--k-fs-base);
+    margin: 0;
+}
+
+.k-h4 {
+    background: var(--k-cream);
+    color: var(--k-text-dark);
+    font-weight: 700;
+    font-style: italic;
+    text-align: left;
+    padding: var(--k-sp-2) var(--k-sp-3);
+    font-size: var(--k-fs-base);
+    margin: 0;
+}
+
+.k-h5 {
+    background: var(--k-light-steel-blue);
+    color: var(--k-text-dark);
+    font-weight: 700;
+    font-style: italic;
+    text-align: left;
+    padding: var(--k-sp-1) var(--k-sp-3);
+    font-size: var(--k-fs-base);
+    margin: 0;
+}
+
+.k-h6 {
+    background: var(--k-mid-grey);
+    color: var(--k-text-dark);
+    font-weight: 700;
+    font-style: italic;
+    text-align: left;
+    padding: var(--k-sp-1) var(--k-sp-3);
+    font-size: var(--k-fs-base);
+    margin: 0;
+}
+
+.k-h7 {
+    background: var(--k-light-grey);
+    color: var(--k-text-dark);
+    font-weight: 700;
+    font-style: italic;
+    text-align: left;
+    padding: var(--k-sp-1) var(--k-sp-3);
+    font-size: var(--k-fs-sm);
+    margin: 0;
+}
+
+/* ---------- 4. Dev (greyscale) heading hierarchy --------------------- */
+/* Add `.k-dev` modifier on a parent (or use `.k-dh1`-`.k-dh7` directly)
+   to swap the entire view to internal/dev tone — never mix with branded */
+
+.k-dev .k-h1, .k-dh1 { background: var(--k-dev-h1); color: var(--k-text-light); font-weight: 700; text-align: center; padding: var(--k-sp-3) var(--k-sp-4); font-size: var(--k-fs-xxl); margin: 0; }
+.k-dev .k-h2, .k-dh2 { background: var(--k-dev-h2); color: var(--k-text-light); font-weight: 700; text-align: center; padding: var(--k-sp-2) var(--k-sp-3); font-size: var(--k-fs-lg);  margin: 0; }
+.k-dev .k-h3, .k-dh3 { background: var(--k-dev-h3); color: var(--k-text-light); font-weight: 700; text-align: left;   padding: var(--k-sp-2) var(--k-sp-3); font-size: var(--k-fs-base); margin: 0; }
+.k-dev .k-h4, .k-dh4 { background: var(--k-dev-h4); color: var(--k-text-dark);  font-weight: 700; font-style: italic; text-align: left; padding: var(--k-sp-2) var(--k-sp-3); font-size: var(--k-fs-base); margin: 0; }
+.k-dev .k-h5, .k-dh5 { background: var(--k-dev-h5); color: var(--k-text-dark);  font-weight: 700; font-style: italic; text-align: left; padding: var(--k-sp-1) var(--k-sp-3); font-size: var(--k-fs-base); margin: 0; }
+.k-dev .k-h6, .k-dh6 { background: var(--k-dev-h6); color: var(--k-text-dark);  font-weight: 700; font-style: italic; text-align: left; padding: var(--k-sp-1) var(--k-sp-3); font-size: var(--k-fs-base); margin: 0; }
+.k-dev .k-h7, .k-dh7 { background: var(--k-dev-h7); color: var(--k-text-dark);  font-weight: 700; font-style: italic; text-align: left; padding: var(--k-sp-1) var(--k-sp-3); font-size: var(--k-fs-sm);   margin: 0; }
+
+/* Optional dev banner ribbon */
+.k-dev-banner {
+    display: inline-block;
+    padding: 2px var(--k-sp-2);
+    background: var(--k-dev-h2);
+    color: var(--k-text-light);
+    font-family: var(--k-font-mono);
+    font-size: var(--k-fs-sm);
+    border-radius: var(--k-radius-pill);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* ---------- 5. Layout primitives ------------------------------------- */
+.k-page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--k-sp-4);
+}
+
+.k-stack > * + * { margin-top: var(--k-sp-4); }
+
+.k-row {
+    display: flex;
+    gap: var(--k-sp-3);
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.k-card {
+    background: #FFFFFF;
+    border: var(--k-border-soft);
+    border-radius: var(--k-radius);
+    box-shadow: var(--k-shadow-sm);
+    overflow: hidden;
+}
+.k-card > .k-h1, .k-card > .k-h2, .k-card > .k-h3 { border-radius: var(--k-radius) var(--k-radius) 0 0; }
+.k-card-body { padding: var(--k-sp-4); }
+
+/* ---------- 6. Tables (the brainer/daily core view) ------------------ */
+.k-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--k-fs-base);
+    background: #FFFFFF;
+}
+
+.k-table thead tr { background: var(--k-steel-blue); color: var(--k-text-light); }
+.k-table thead th {
+    padding: var(--k-sp-2) var(--k-sp-3);
+    font-weight: 700;
+    text-align: left;
+    border-bottom: 2px solid var(--k-mid-grey);
+    white-space: nowrap;
+}
+
+.k-table tbody td {
+    padding: var(--k-sp-2) var(--k-sp-3);
+    border-bottom: var(--k-border-soft);
+    vertical-align: top;
+}
+
+.k-table tbody tr:hover { background: var(--k-light-steel-blue); }
+.k-table tbody tr.k-row-group-start td {
+    border-top: 2px solid var(--k-mid-grey);
+    background: var(--k-cream);
+    font-weight: 600;
+}
+.k-table tbody tr.k-row-total td { font-weight: 700; background: var(--k-light-grey); }
+
+/* numeric cells */
+.k-num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--k-font-mono); }
+
+/* ---------- 7. Status badges ----------------------------------------- */
+.k-badge {
+    display: inline-block;
+    padding: 2px var(--k-sp-2);
+    border-radius: var(--k-radius-pill);
+    font-size: var(--k-fs-sm);
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.k-badge-ok       { background: var(--k-status-ok);     color: var(--k-text-light); }
+.k-badge-hold     { background: var(--k-status-hold);   color: var(--k-text-dark); border: 1px solid #d4b88f; }
+.k-badge-warn     { background: var(--k-status-warn);   color: var(--k-text-light); }
+.k-badge-info     { background: var(--k-status-info);   color: var(--k-text-light); }
+.k-badge-muted    { background: var(--k-status-muted);  color: var(--k-text-dark); }
+
+/* ---------- 8. Buttons / controls ------------------------------------ */
+.k-btn {
+    display: inline-block;
+    padding: var(--k-sp-2) var(--k-sp-4);
+    border: 1px solid var(--k-mid-grey);
+    border-radius: var(--k-radius);
+    background: #FFFFFF;
+    color: var(--k-text-dark);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 120ms ease, border-color 120ms ease;
+    text-decoration: none;
+}
+.k-btn:hover { background: var(--k-light-grey); border-color: var(--k-text-dark); }
+
+.k-btn-primary { background: var(--k-forest-green); color: var(--k-text-light); border-color: var(--k-forest-green); }
+.k-btn-primary:hover { background: #4f8a3e; border-color: #4f8a3e; }
+
+.k-btn-coral { background: var(--k-coral); color: var(--k-text-light); border-color: var(--k-coral); }
+.k-btn-coral:hover { background: #e85a5a; border-color: #e85a5a; }
+
+.k-btn-steel { background: var(--k-steel-blue); color: var(--k-text-light); border-color: var(--k-steel-blue); }
+.k-btn-steel:hover { background: #1d6786; border-color: #1d6786; }
+
+.k-btn-active { background: var(--k-steel-blue); color: var(--k-text-light); border-color: var(--k-steel-blue); }
+
+.k-select, .k-input {
+    padding: var(--k-sp-2) var(--k-sp-3);
+    border: 1px solid var(--k-mid-grey);
+    border-radius: var(--k-radius);
+    background: #FFFFFF;
+    font: inherit;
+    color: var(--k-text-dark);
+}
+
+.k-tabs { display: flex; gap: var(--k-sp-1); flex-wrap: wrap; }
+.k-tab {
+    padding: var(--k-sp-2) var(--k-sp-4);
+    border: 1px solid var(--k-mid-grey);
+    border-bottom: none;
+    border-radius: var(--k-radius) var(--k-radius) 0 0;
+    background: var(--k-light-grey);
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--k-text-dark);
+}
+.k-tab:hover { background: #FFFFFF; }
+.k-tab[aria-current="page"], .k-tab.is-active {
+    background: var(--k-steel-blue);
+    color: var(--k-text-light);
+    border-color: var(--k-steel-blue);
+}
+
+/* ---------- 9. App banner (Kommissary 2.0 utility header) ----------- */
+/* Layout: full-width colored banner. Left stack: "Kommissary 2.0" /
+   utility-selector dropdown / "BUILD #N". Right: Kommissary coral icon
+   on a Sidecar (soft cream) pill backplate. */
+
+/* Per-utility theme variants — each utility owns one banner color. */
+.k-theme-dlt      { --k-theme-bg: var(--k-orange-roughy); --k-theme-fg: #FFFFFF; }
+.k-theme-brainer  { --k-theme-bg: var(--k-lunar-green);   --k-theme-fg: #FFFFFF; }
+.k-theme-daily    { --k-theme-bg: var(--k-steel-blue);    --k-theme-fg: #FFFFFF; }
+.k-theme-menu     { --k-theme-bg: var(--k-gamboge);       --k-theme-fg: #FFFFFF; }
+.k-theme-neutral  { --k-theme-bg: var(--k-mid-grey);      --k-theme-fg: #FFFFFF; }   /* fallback / KMPP shim */
+
+.k-banner {
+    background: var(--k-theme-bg, var(--k-mid-grey));
+    color: var(--k-theme-fg, #FFFFFF);
+    padding: var(--k-sp-4) var(--k-sp-5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--k-sp-5);
+    /* breakout to full viewport width even when a centered .k-page wraps it */
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    padding-left: max(var(--k-sp-5), calc(50vw - 640px));
+    padding-right: max(var(--k-sp-5), calc(50vw - 640px));
+}
+
+.k-banner-left { display: flex; flex-direction: column; gap: 2px; line-height: 1.15; }
+.k-banner-title {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    color: var(--k-theme-fg);
+    margin: 0;
+}
+/* Utility selector — white widget containing both utility name and build,
+   theme-colored text + chevron. <details>/<summary> for native dropdown
+   behavior, no JS required. */
+.k-banner-utility {
+    position: relative;
+    display: inline-block;
+    margin-top: var(--k-sp-2);
+}
+
+.k-banner-utility > summary {
+    list-style: none;
+    cursor: pointer;
+    background: #FFFFFF;
+    color: var(--k-theme-bg);
+    border-radius: var(--k-radius);
+    padding: 6px 28px 6px 12px;
+    min-width: 150px;
+    box-shadow: var(--k-shadow-sm);
+    line-height: 1.2;
+    position: relative;
+    display: inline-block;
+    user-select: none;
+}
+.k-banner-utility > summary::-webkit-details-marker { display: none; }
+.k-banner-utility > summary::marker { display: none; content: ""; }
+.k-banner-utility > summary::after {
+    content: "";
+    position: absolute;
+    right: 10px; top: 50%;
+    width: 12px; height: 12px;
+    transform: translateY(-50%);
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E") no-repeat center / 12px 12px;
+            mask: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E") no-repeat center / 12px 12px;
+    transition: transform 120ms ease;
+}
+.k-banner-utility[open] > summary::after { transform: translateY(-50%) rotate(180deg); }
+
+.k-banner-utility-name {
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--k-theme-bg);
+}
+.k-banner-utility-build {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--k-theme-bg);
+    opacity: 0.7;
+    margin-top: 2px;
+}
+
+.k-banner-utility-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background: #FFFFFF;
+    border: var(--k-border-soft);
+    border-radius: var(--k-radius);
+    box-shadow: var(--k-shadow-md);
+    min-width: 200px;
+    padding: 4px 0;
+    z-index: 50;
+    color: var(--k-text-dark);
+}
+.k-banner-utility-menu a {
+    display: block;
+    padding: 8px 14px;
+    color: var(--k-text-dark);
+    text-decoration: none;
+    border-bottom: var(--k-border-soft);
+}
+.k-banner-utility-menu a:last-child { border-bottom: none; }
+.k-banner-utility-menu a:hover { background: var(--k-light-grey); }
+.k-banner-utility-menu a.is-current { background: var(--k-light-steel-blue); }
+.k-banner-utility-menu-name {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.k-banner-utility-menu-build {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-top: 2px;
+}
+
+.k-banner-right { display: flex; align-items: center; }
+.k-banner-logo {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    background: var(--k-sidecar);
+    border-radius: var(--k-radius-pill);
+    padding: 6px;
+    box-shadow: var(--k-shadow-sm);
+}
+
+/* Optional sub-context line under the banner (date range, week, etc.) */
+.k-banner-sub {
+    color: var(--k-mid-grey);
+    font-size: var(--k-fs-sm);
+    padding: var(--k-sp-2) 0 var(--k-sp-3);
+    border-bottom: var(--k-border-soft);
+    margin-bottom: var(--k-sp-4);
+}
+
+/* ---------- 10. Drilldown panel (site detail / event history) -------- */
+.k-drilldown {
+    margin-top: var(--k-sp-3);
+    padding: var(--k-sp-4);
+    background: var(--k-light-steel-blue);
+    border-left: 4px solid var(--k-steel-blue);
+    border-radius: 0 var(--k-radius) var(--k-radius) 0;
+}
+.k-drilldown dt { font-weight: 600; color: var(--k-steel-blue); }
+.k-drilldown dd { margin: 0 0 var(--k-sp-2) 0; }
+
+/* ---------- 11. Utilities -------------------------------------------- */
+.k-muted   { color: var(--k-mid-grey); }
+.k-strong  { font-weight: 700; }
+.k-italic  { font-style: italic; }
+.k-mono    { font-family: var(--k-font-mono); }
+.k-center  { text-align: center; }
+.k-right   { text-align: right; }
+.k-nowrap  { white-space: nowrap; }
+.k-hidden  { display: none !important; }
+
+/* ---------- 12. Print stylesheet (kitchen / drivers) ----------------- */
+@media print {
+    body { background: #FFFFFF; font-size: 11pt; }
+    .k-page { max-width: 100%; padding: 0; }
+    .k-no-print, .k-tabs, .k-btn, .k-select, .k-input { display: none !important; }
+    .k-table thead tr { background: #FFFFFF; color: var(--k-text-dark); border-bottom: 2px solid var(--k-text-dark); }
+    .k-table thead th { color: var(--k-text-dark); }
+    .k-h1, .k-h2, .k-h3 { color: var(--k-text-dark); background: #FFFFFF !important; border-bottom: 2px solid var(--k-text-dark); }
+    .k-card { box-shadow: none; border: 1px solid var(--k-text-dark); }
+    .k-badge { border: 1px solid var(--k-text-dark); background: #FFFFFF !important; color: var(--k-text-dark) !important; }
+    a { color: var(--k-text-dark); text-decoration: underline; }
+    tr { page-break-inside: avoid; }
+}
+
+</style>
+</head>
+<body>
+<div class="k-page">
+
+  <div class="k-banner k-theme-daily">
+    <div class="k-banner-left">
+      <div class="k-banner-title">Kommissary 2.0</div>
+      <details class="k-banner-utility">
+        <summary>
+          <div class="k-banner-utility-name">Daily 2.0</div>
+          <div class="k-banner-utility-build">BUILD #1</div>
+        </summary>
+        <div class="k-banner-utility-menu">
+          <a href="daily.html" class="is-current">
+            <div class="k-banner-utility-menu-name">Daily 2.0</div>
+            <div class="k-banner-utility-menu-build">BUILD #1</div>
+          </a>
+          <a href="brainer.html">
+            <div class="k-banner-utility-menu-name">Brainer 2.0</div>
+            <div class="k-banner-utility-menu-build">BUILD #1</div>
+          </a>
+          <a href="https://script.google.com/a/macros/kommissary.com/s/AKfycbx-Ub-gsw62KRwHkRNHDKNoSJY1mSLYOXCEVwuLVmUjp2AXDeGK9SDxBSNJGt46wXnq/exec" target="_blank" rel="noopener">
+            <div class="k-banner-utility-menu-name">Menu 2.0</div>
+            <div class="k-banner-utility-menu-build">BUILD #2</div>
+          </a>
+          <a href="#">
+            <div class="k-banner-utility-menu-name">DLT-Pilot</div>
+            <div class="k-banner-utility-menu-build">BUILD #33</div>
+          </a>
+          <a href="#">
+            <div class="k-banner-utility-menu-name">KMPP</div>
+            <div class="k-banner-utility-menu-build">legacy</div>
+          </a>
+        </div>
+      </details>
+    </div>
+    <div class="k-banner-right">
+      <img class="k-banner-logo" src="data:image/png;base64,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" alt="Kommissary">
+    </div>
+  </div>
+  <div class="k-banner-sub">daily 2.0 — live from KPF Production · per-site detail</div>
+
+  <p class="k-no-print"><a href="brainer.html">← back to brainer (week view)</a></p>
+
+  <h1 class="k-h1">Site 67 — Supportive Children Advocacy Network (SCAN) - Robinson</h1>
+
+  <div class="k-card">
+    <div class="k-h2">Site profile</div>
+    <div class="k-card-body">
+      <dl class="k-drilldown" style="background:#fff;border-left:none;padding:0;">
+        <div class="k-row"><dt class="k-strong" style="min-width:140px;">CIPS ID</dt><dd class="k-mono">67</dd></div>
+        <div class="k-row"><dt class="k-strong" style="min-width:140px;">Program</dt><dd>DYCD</dd></div>
+        <div class="k-row"><dt class="k-strong" style="min-width:140px;">Address</dt><dd>110 East 129th Street, Manhattan, Manhattan, 10035</dd></div>
+        <div class="k-row"><dt class="k-strong" style="min-width:140px;">Primary contact</dt><dd>Denzil Saunders / 9173654125</dd></div>
+        <div class="k-row"><dt class="k-strong" style="min-width:140px;">Delivery window</dt><dd>08:00:00 - 15:00:00</dd></div>
+        <div class="k-row"><dt class="k-strong" style="min-width:140px;">Hot/Cold preference</dt><dd>Hot</dd></div>
+        <div class="k-row"><dt class="k-strong" style="min-width:140px;">Active</dt><dd>Yes</dd></div>
+      </dl>
+    </div>
+  </div>
+
+  <div class="k-card">
+    <div class="k-h4">Next scheduled: 2026-04-28</div><div class="k-card-body">  <div class="k-row">    <div><dt class="k-strong">Status</dt><dd><span class="k-badge k-badge-hold">hold</span></dd></div>    <div><dt class="k-strong">Snacks</dt><dd class="k-num k-strong">20</dd></div>    <div><dt class="k-strong">Suppers</dt><dd class="k-num k-strong">20</dd></div>    <div><dt class="k-strong">Hot/Cold</dt><dd>Hot</dd></div>    <div><dt class="k-strong">Source</dt><dd class="k-mono k-muted">forward-horizon-2026-06-26</dd></div>  </div></div>
+  </div>
+
+  <div class="k-card">
+    <div class="k-h2">Delivery event history (last 14 days + upcoming)</div>
+    <table class="k-table">
+      <thead><tr>
+        <th>Date</th><th>Route</th><th>Snacks</th><th>Suppers</th><th>Total</th>
+        <th>Hot/Cold</th><th>Status</th><th>Source</th><th>Loaded at</th>
+      </tr></thead>
+      <tbody><tr><td><strong>2026-04-14</strong></td><td>—</td><td class="k-num">0</td><td class="k-num">0</td><td class="k-num">0</td><td>Hot</td><td><span class="k-badge k-badge-hold">hold</span></td><td class="k-mono">Missing Delivery S16</td><td class="k-mono k-muted">2026-04-14 21:08:40</td></tr><tr><td><strong>2026-04-15</strong></td><td>—</td><td class="k-num">20</td><td class="k-num">20</td><td class="k-num">60</td><td>Hot</td><td><span class="k-badge k-badge-ok">scheduled</span></td><td class="k-mono">standing-count-backfill</td><td class="k-mono k-muted">2026-04-16 21:05:37</td></tr><tr><td><strong>2026-04-16</strong></td><td>—</td><td class="k-num">20</td><td class="k-num">20</td><td class="k-num">60</td><td>Hot</td><td><span class="k-badge k-badge-ok">scheduled</span></td><td class="k-mono">standing-count-backfill</td><td class="k-mono k-muted">2026-04-16 21:05:54</td></tr><tr><td><strong>2026-04-17</strong></td><td>—</td><td class="k-num">20</td><td class="k-num">20</td><td class="k-num">60</td><td>Hot</td><td><span class="k-badge k-badge-ok">scheduled</span></td><td class="k-mono">standing-count-backfill</td><td class="k-mono k-muted">2026-04-16 21:06:15</td></tr><tr><td><strong>2026-04-20</strong></td><td>—</td><td class="k-num">20</td><td class="k-num">20</td><td class="k-num">60</td><td>Hot</td><td><span class="k-badge k-badge-ok">scheduled</span></td><td class="k-mono">prod-sheet-sync-2026-04-21</td><td class="k-mono k-muted">2026-04-21 21:25:14</td></tr><tr><td><strong>2026-04-21</strong></td><td>—</td><td class="k-num">20</td><td class="k-num">20</td><td class="k-num">60</td><td>Hot</td><td><span class="k-badge k-badge-ok">scheduled</span></td><td class="k-mono">prod-sheet-sync-2026-04-21</td><td class="k-mono k-muted">2026-04-21 21:25:15</td></tr><tr><td><strong>2026-04-22</strong></td><td>—</td><td class="k-num">20</td><td class="k-num">20</td><td class="k-num">60</td><td>Hot</td><td><span class="k-badge k-badge-ok">scheduled</span></td><td class="k-mono">prod-sheet-sync-2026-04-21</td><td class="k-mono k-muted">2026-04-21 21:25:16</td></tr><tr><td><strong>2026-04-23</strong></td><td>—</td><td class="k-num">20</td><td class="k-num">20</td><td class="k-num">60</td><td>Hot</td><td><span class="k-badge k-badge-ok">scheduled</span></td><td class="k-mono">prod-sheet-sync-2026-04-21</td><td class="k-mono k-muted">2026-04-21 21:25:17</td></tr><tr><td><strong>2026-04-24</strong></td><td>—</td><td class="k-num">20</td><td class="k-num">20</td><td class="k-num">60</td><td>Hot</td><td><span class="k-badge k-badge-ok">scheduled</span></td><td class="k-mono">forward-horizon-2026-06-26</td><td class="k-mono k-muted">2026-04-21 19:53:45</td></tr><tr><td><strong>2026-04-27</strong></td><td>2</td><td class="k-num">20</td><td class="k-num">20</td><td class="k-num">60</td><td>Hot</td><td><span class="k-badge k-badge-ok">scheduled</span></td><td class="k-mono">forward-horizon-2026-06-26</td><td class="k-mono k-muted">2026-04-21 19:53:45</td></tr><tr><td><strong>2026-04-28</strong></td><td>—</td><td class="k-num">20</td><td class="k-num">20</td><td class="k-num">40</td><td>Hot</td><td><span class="k-badge k-badge-hold">hold</span></td><td class="k-mono">forward-horizon-2026-06-26</td><td class="k-mono k-muted">2026-04-21 19:53:45</td></tr><tr><td><strong>2026-04-29</strong></td><td>2</td><td class="k-num">20</td><td class="k-num">20</td><td class="k-num">60</td><td>Hot</td><td><span class="k-badge k-badge-ok">scheduled</span></td><td class="k-mono">forward-horizon-2026-06-26</td><td class="k-mono k-muted">2026-04-21 19:53:45</td></tr><tr><td><strong>2026-04-30</strong></td><td>2</td><td class="k-num">20</td><td class="k-num">20</td><td class="k-num">60</td><td>Hot</td><td><span class="k-badge k-badge-ok">scheduled</span></td><td class="k-mono">forward-horizon-2026-06-26</td><td class="k-mono k-muted">2026-04-21 19:53:45</td></tr><tr><td><strong>2026-05-01</strong></td><td>2</td><td class="k-num">20</td><td class="k-num">20</td><td class="k-num">60</td><td>Hot</td><td><span class="k-badge k-badge-ok">scheduled</span></td><td class="k-mono">forward-horizon-2026-06-26</td><td class="k-mono k-muted">2026-04-21 19:53:45</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="k-h7" style="margin-top: var(--k-sp-6);">
+    Generated 2026-04-28 16:54 by bb5 / scaffold script · live KPF Production read at fetch time
+  </div>
+</div>
+</body>
+</html>
